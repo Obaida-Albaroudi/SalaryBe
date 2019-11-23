@@ -4,6 +4,7 @@ from flask_marshmallow import Marshmallow
 import os
 import sqlite3
 from flask_cors import CORS
+import psycopg2
 
 import pandas as pd
 
@@ -16,13 +17,14 @@ CORS(app)
 
 @app.route('/api', methods=['POST'])
 def predict():
-    conn = sqlite3.connect('TestDB.db')
+    DATABASE_URL =b'postgres://nmqpakpthcuntd:ffc1433121c94ae86c30d33d81e07ff304a85c0dbfd8231943863bc0aad82f6c@ec2-54-221-195-148.compute-1.amazonaws.com:5432/davdmlmq9b29mi'
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
     data = request.get_json(force=True)
-    print(data)
+    print("wow", data)
     number = [data["Region"], data["Majors"], data["College"]]
     def region (Region):
-        cur.execute(f'SELECT Average FROM Region WHERE region="{Region}"')
+        cur.execute('SELECT public."Region"."Average" ''FROM public."Region" ''WHERE public."Region"."region"'f"='{Region}'")
         people = cur.fetchall()
         per=0
         for person in people:
@@ -31,12 +33,12 @@ def predict():
 
 
     def majors (Majors):
-        cur.execute(f'SELECT Average FROM Majors WHERE name="{Majors}"')
+        cur.execute('SELECT public."Majors"."Average"''FROM public."Majors"''WHERE public."Majors"."name"'f"='{Majors}'")
         people = cur.fetchall()
         return round(people[0][0])
 
     def college (College):
-        cur.execute(f'SELECT Average FROM College WHERE name="{College}"')
+        cur.execute('SELECT public."College"."Average"''FROM public."College"''WHERE public."College"."name"'f"='{College}'")
         people = cur.fetchall()
         return round(people[0][0])
 
