@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify;
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os
-import sqlite3
 from flask_cors import CORS
 import psycopg2
 
