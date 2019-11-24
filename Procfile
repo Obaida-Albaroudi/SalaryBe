@@ -1,3 +1,4 @@
-web: gunicorn app:app
+web: python app.py $PORT
+heroku ps:scale web=1
 
 
